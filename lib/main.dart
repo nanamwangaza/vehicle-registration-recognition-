@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:vehicle_registration/pages/camera_page.dart';
-import 'package:vehicle_registration/pages/geolocator.dart';
-import 'package:vehicle_registration/pages/home.dart';
-import 'package:vehicle_registration/pages/home_pro.dart';
-import 'package:vehicle_registration/pages/launch_camera.dart';
-import 'package:vehicle_registration/pages/login_page.dart';
-import 'package:vehicle_registration/pages/signup.dart';
+// import 'package:vehicle_registration/pages/camera_page.dart';
+// import 'package:vehicle_registration/pages/geolocator.dart';
+// import 'package:vehicle_registration/pages/home.dart';
+// import 'package:vehicle_registration/pages/home_pro.dart';
+// import 'package:vehicle_registration/pages/launch_camera.dart';
+// import 'package:vehicle_registration/pages/login_page.dart';
+// import 'package:vehicle_registration/pages/signup.dart';
 import 'package:vehicle_registration/pages/welcome_page.dart';
 
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:WelcomePage()
+      home:const WelcomePage()
     );
   }
 }
