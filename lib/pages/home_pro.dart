@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:vehicle_registration/pages/camera_page.dart';
 import 'package:vehicle_registration/pages/launch_camera.dart';
-
+//import 'package:vehicle_registration/pages/signup.dart';
+//import 'package:vehicle_registration/pages/user_profile.dart';
 import 'home.dart';
 
+
+
+
 class HomePro extends StatefulWidget {
-  const HomePro({super.key});
+  const HomePro({super.key,});
 
   @override
   State<HomePro> createState() => _HomeProState();
 }
 
 class _HomeProState extends State<HomePro> {
+
+ 
+   
   int _currentIndex = 0;
   List<XFile> capturedImages = [];
   final List<Widget> children=[
-    Home(),
-    LaunchCamera(),
-    ImageListPage(images:[])
+    const Home(),
+   const  LaunchCamera(),
+  ImageListPage(images:const [])
   ];
-
   void onTappedBar(int newIndex){
     setState(() {
       _currentIndex=newIndex;
@@ -33,8 +39,8 @@ class _HomeProState extends State<HomePro> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTappedBar,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.black,
-        items: <BottomNavigationBarItem>[
+        selectedItemColor: const  Color(0xFF006494),
+        items: const <BottomNavigationBarItem>[
 
         
 

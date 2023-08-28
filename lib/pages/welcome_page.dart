@@ -19,7 +19,7 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
           ),
-          Container(
+          Container( 
           color: Colors.black.withOpacity(0.8), // Adjust the opacity as needed
           ),
           Center(
@@ -28,7 +28,16 @@ class WelcomePage extends StatelessWidget {
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 80),
-                Text('WELCOME TO', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+             GlowingText(
+                    text: 'WELCOME TO',
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                    glowColor: Color(0xFF003366),
+                  ),
                 SizedBox(height: 200),
                 Center(
                   child: GlowingText(
@@ -39,13 +48,13 @@ class WelcomePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
-                    glowColor: Color(0xFF89dad0),
+                    glowColor: Color(0xFF003366),
                   ),
                 ),
                 SizedBox(height: 150),
                 GlowingButton(
-                  color1: Color(0xFF89dad0),
-                  color2: Color(0xFF89dad0),
+                  color1: Color(0xFF003366),
+                  color2:Color(0xFF003366),
                   text: 'Get Started',
                   onTap: () {
                     Navigator.push(

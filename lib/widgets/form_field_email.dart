@@ -72,6 +72,7 @@ class FormFieldEmail extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
+                keyboardType:TextInputType.emailAddress,
               ),
             ),
           ),

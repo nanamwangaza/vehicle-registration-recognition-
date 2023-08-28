@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class CameraPage extends StatefulWidget {
-  final List<CameraDescription>? cameras;//list of cameras
+  final List<CameraDescription>? cameras; // list of cameras
   const CameraPage({this.cameras});
 
   @override
@@ -26,103 +24,20 @@ class _CameraPageState extends State<CameraPage> {
     );
 
     controller.initialize().then((_) {
-      if (!mounted) { //If not in widget tree the callback shouldn't continue executing, as it might cause errors or unwanted behavior
+      if (!mounted) {
         return;
       }
+      setState(() {});
 
-      setState(() {});//triggers widget rebuild
-
-      // Load stored image paths from SharedPreferences
-    // final prefs = await SharedPreferences.getInstance();
-    // List<String> storedImagePaths = prefs.getStringList('captured_images') ?? [];
-    // capturedImages = storedImagePaths.map((path) => XFile(path)).toList();
-
-
-      @override
-      void dispose() {
-        controller.dispose();
-        super.dispose();
-      }
-
-
-
-
-
-
-
-   String locationMessage = 'Current location of the user';
-  String address = ''; // Variable to hold the address
-  late String lat;
-  late String long;
-
-  // Getting current location
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied)
-        return Future.error('Location permissions are denied');
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request');
-    }
-
-    return Geolocator.getCurrentPosition();
-  }
-
-  // Listen to location updates
-  void _liveLocation() {
-    LocationSettings locationSettings = const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-    );
-    Geolocator.getPositionStream(locationSettings: locationSettings)
-        .listen((Position position) {
-      lat = position.latitude.toString();
-      long = position.longitude.toString();
-
-      setState(() {
-        locationMessage = 'Latitude: $lat, Longitude: $long';
-      });
+    
     });
   }
 
-  // Get address
-  Future<void> _getAddressFromLatLong(Position position) async {
-    List<Placemark> placemark = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
-
-    if (placemark.isNotEmpty) {
-      final street = placemark[0].street ?? '';
-      final subAdministrativeArea = placemark[0].subAdministrativeArea ?? '';
-      final locality = placemark[0].locality ?? '';
-      final administrativeArea = placemark[0].administrativeArea ?? '';
-      final country = placemark[0].country ?? '';
-
-      setState(() {
-        address = '$street, $subAdministrativeArea, $locality, $administrativeArea, $country';
-      });
-    } else {
-      setState(() {
-        address = 'Address information not available';
-      });
-    }
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
-
-
-    }
-    );
-  }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -141,23 +56,22 @@ class _CameraPageState extends State<CameraPage> {
         ElevatedButton(
           onPressed: () async {
             XFile? pictureFile = await controller.takePicture();
-            if (pictureFile !=null) {
-              _showFullscreenImageDialog(context, pictureFile.path);
-              capturedImages.add(pictureFile);
-            }
+          await uploadImageToBackend(pictureFile.path); //upload image to backend first
+            _showFullscreenImageDialog(context, pictureFile.path);
+            capturedImages.add(pictureFile);
           },
-          child: Text('Take Picture'),
+          child: Text('Take Photo'),
         ),
-        ElevatedButton(
-          onPressed: () {
-            _navigateToImageList(context);
-          },
-          child: Text('View Captured Photos'),
-        ),
+        
+        // ElevatedButton(
+        //   onPressed: () {
+        //     _navigateToImageList(context);
+        //   },
+        //   child: Text('View Captured Photos'),
+        // ),
       ],
     );
   }
-
 
   void _showFullscreenImageDialog(BuildContext context, String imagePath) {
     showDialog(
@@ -170,11 +84,12 @@ class _CameraPageState extends State<CameraPage> {
               _navigateToImageList(context);
             },
             child: Container(
-              constraints: BoxConstraints.expand(),
-              child: Image.file(
-                File(imagePath),
-                fit: BoxFit.contain,
-              ),
+          constraints: BoxConstraints.expand(),
+          color: Colors.black, // Add a black background color
+          child: Center(
+            child: Image.file(
+              File(imagePath),
+              fit: BoxFit.contain)),
             ),
           ),
         );
@@ -196,38 +111,7 @@ class _CameraPageState extends State<CameraPage> {
       });
     }
   }
-
-  void _deleteImage(int index, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Delete Image'),
-          content: Text('Are you sure you want to delete this image?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Image deleted')),
-                );
-                Navigator.pop(context, true); // Signal image deletion
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
-
 
 class ImageListPage extends StatefulWidget {
   final List<XFile> images;
@@ -239,8 +123,7 @@ class ImageListPage extends StatefulWidget {
 }
 
 class _ImageListPageState extends State<ImageListPage> {
-bool _imageDeleted = false;
- 
+  bool _imageDeleted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -253,13 +136,15 @@ bool _imageDeleted = false;
             onTap: () {
               _showFullscreenImageDialog(context, widget.images[index].path);
             },
-            leading: Image.file(File(widget.images[index].path), width: 50, height: 50),
+            leading: Image.file(
+                File(widget.images[index].path),
+                width: 50,
+                height: 50),
             title: Text('Image ${index + 1}'),
             trailing: IconButton(
-              icon: Icon(Icons.delete,color:Colors.red ,),
+              icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 _deleteImage(index, context);
-                
               },
             ),
           );
@@ -267,8 +152,6 @@ bool _imageDeleted = false;
       ),
     );
   }
-
-  
 
   void _showFullscreenImageDialog(BuildContext context, String imagePath) {
     showDialog(
@@ -324,4 +207,26 @@ bool _imageDeleted = false;
       });
     }
   }
+}
+
+
+Future<String> uploadImageToBackend(String imagePath) async {
+  var request = http.MultipartRequest(
+    'POST',
+    Uri.parse('YOUR_BACKEND_URL/upload'), // Replace with actual API endpoint
+  );
+
+  request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+
+  try {
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      return responseBody; // You can handle the response from the backend here
+    }
+  } catch (error) {
+    print('Error uploading image: $error');
+  }
+
+  return '';
 }

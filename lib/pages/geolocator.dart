@@ -10,7 +10,7 @@ class UserLocation extends StatefulWidget {
 }
 
 class _UserLocationState extends State<UserLocation> {
-  String locationMessage = 'Current location of the user';
+  String locationMessage = 'My current location';
   String address = ''; // Variable to hold the address
   late String lat;
   late String long;
@@ -104,14 +104,14 @@ class _UserLocationState extends State<UserLocation> {
                   long = '${value.longitude}';
 
                   setState(() {
-                    locationMessage = 'Latitude: $lat, Longitude: $long';
+                   // locationMessage = 'Latitude: $lat, Longitude: $long';
 
                     _liveLocation();
                     _getAddressFromLatLong(value);
                   });
                 });
               },
-              child: Text('Get current location'),
+              child: Text('My location'),
             ),
           ),
         ],

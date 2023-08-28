@@ -18,7 +18,7 @@ bool _imageDeleted = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Captured Photos')),
+      appBar: _buildAppBar(),
       body: ListView.builder(
         itemCount: widget.images.length,
         itemBuilder: (context, index) {
@@ -95,3 +95,46 @@ bool _imageDeleted = false;
     }
   }
 }
+
+ AppBar _buildAppBar() {
+    return AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF003366),
+              Colors.black,
+            ], // Gradient colors
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Hello Nana!',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 26),
+          ),
+          Text(
+            'Dar-es-Salaam, Tanzania',
+            style: TextStyle(
+              color:Colors.white ,
+              fontSize: 15// Text color
+            ),
+          )
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.notifications,
+            color: Colors.white, // Icon color
+          ),
+          onPressed: () {},
+        ),
+      ],
+    );
+ }

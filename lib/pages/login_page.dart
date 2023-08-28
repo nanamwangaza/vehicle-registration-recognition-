@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:vehicle_registration/pages/forgot_password.dart';
 import 'package:vehicle_registration/pages/home_pro.dart';
 import 'package:vehicle_registration/pages/signup.dart';
@@ -19,20 +22,31 @@ class _LoginState extends State<Login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
+ void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Perform login logic using the saved values
-      // For example, you could authenticate the user's credentials
+      // final loginData = {
+      //   'email': _emailController.text,
+      //   'password': _passwordController.text,
+      // };
 
-      // Navigate to the Home page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePro(),
-        ),
-      );
+      // final apiUrl = 'https://your-fastapi-backend.com/login';  // Replace with your backend URL for login
+      // final response = await http.post(
+      //   Uri.parse(apiUrl),
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: jsonEncode(loginData),
+      // );
+
+      // if (response.statusCode == 200) {
+      //   // Login successful, navigate to HomePro page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePro()),
+        );
+      // } else {
+      //   print('Login failed. Status code: ${response.statusCode}');
+      // }
     }
   }
 
@@ -52,6 +66,8 @@ class _LoginState extends State<Login> {
           Padding(
             padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0),
             child: Container(
+
+              
               decoration: BoxDecoration(
                 color: Colors.white,
               ),

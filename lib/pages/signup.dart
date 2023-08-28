@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:vehicle_registration/pages/home.dart';
+import 'package:vehicle_registration/pages/home_pro.dart';
 import 'package:vehicle_registration/pages/login_page.dart';
 import 'package:vehicle_registration/widgets/form_field_cofirm_password.dart';
 import 'package:vehicle_registration/widgets/form_field_email.dart';
@@ -14,6 +18,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _firstNameController = TextEditingController();
@@ -22,11 +27,10 @@ class _SignupState extends State<Signup> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
-  void _submitForm() {
+ void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Trim password strings before comparing
       final trimmedPassword = _passwordController.text.trim();
       final trimmedConfirmPassword = _confirmPasswordController.text.trim();
 
@@ -35,18 +39,31 @@ class _SignupState extends State<Signup> {
         return;
       }
 
-      // Perform signup logic using the saved values
-      // For example, you could save the data to a database or API
+      final signupData = {
+        'firstName': _firstNameController.text,
+        'lastName': _lastNameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      };
 
-      // Navigate to the Home page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
+      final apiUrl = ''; // Replace with your backend URL
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(signupData),
       );
+
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePro()),
+        );
+      } else {
+        print('Signup failed. Status code: ${response.statusCode}');
+      }
     }
   }
+
 
   @override
   void dispose() {
@@ -61,6 +78,7 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -185,13 +203,15 @@ class _SignupState extends State<Signup> {
                           children: [
                             Text('Already have an account?'),
                             SizedBox(width: 5),
+
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        Login(), // Replace LoginPage with your actual login page
+                                         Login(
+    ), 
                                   ),
                                 );
                               },

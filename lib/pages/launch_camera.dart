@@ -26,7 +26,7 @@ class _LaunchCameraState extends State<LaunchCamera> {
                 //value is the list of available cameras
                 );
                 },
-                child: Text('Launch Camera',style: TextStyle(color: Colors.black),)
+                child: Text('Launch Camera',style: TextStyle(color: Color(0xFF006494)),)
                 ),
           )
         ],
