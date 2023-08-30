@@ -77,11 +77,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       children: [
                         SizedBox(height: 20),
                         Text(
-                          'Forgot Password?',
+                          'FORGOT PASSWORD?',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                            fontSize: 26,
                           ),
                         ),
 

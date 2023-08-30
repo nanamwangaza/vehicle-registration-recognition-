@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:vehicle_registration/pages/home.dart';
+
 import 'package:vehicle_registration/pages/home_pro.dart';
 import 'package:vehicle_registration/pages/login_page.dart';
 import 'package:vehicle_registration/widgets/form_field_cofirm_password.dart';
 import 'package:vehicle_registration/widgets/form_field_email.dart';
 import 'package:vehicle_registration/widgets/form_field_password.dart';
 import 'package:vehicle_registration/widgets/form_fields.dart';
+
+
+//full name,
+//username
+//email
+//password
+//punguza size za login,signup
+//bottom nav iwe na home, records(za info about the car)
+//
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -100,7 +109,7 @@ class _SignupState extends State<Signup> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                            fontSize: 26,
                           ),
                         ),
                         FormFieldWidget(
