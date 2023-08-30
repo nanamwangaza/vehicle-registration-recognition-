@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:vehicle_registration/pages/home.dart';
-import 'package:vehicle_registration/pages/launch_camera.dart';
 import 'package:vehicle_registration/pages/login_page.dart';
-import 'package:vehicle_registration/pages/logout.dart';
+
 //import 'package:vehicle_registration/pages/signup.dart';
 //import 'package:vehicle_registration/pages/user_profile.dart';
 
