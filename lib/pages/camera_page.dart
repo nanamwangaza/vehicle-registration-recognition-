@@ -14,6 +14,7 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late CameraController controller;
   List<XFile> capturedImages = [];
+  XFile? currentImage;
 
   @override
   void initState() {
@@ -28,8 +29,6 @@ class _CameraPageState extends State<CameraPage> {
         return;
       }
       setState(() {});
-
-    
     });
   }
 
@@ -45,24 +44,80 @@ class _CameraPageState extends State<CameraPage> {
       return Center(child: CircularProgressIndicator());
     }
 
+    Widget previewWidget;
+
+    if (currentImage == null) {
+      previewWidget = Column(
+        children: [
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: controller.value.aspectRatio,
+              child: CameraPreview(controller),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  XFile? pictureFile = await controller.takePicture();
+                  setState(() {
+                    currentImage = pictureFile;
+                  });
+                },
+                child: Text('Take Photo'),
+              ),
+               ElevatedButton(
+          onPressed: () {
+            _navigateToImageList(context);
+          },
+          child: Text('View Captured Photos'),
+        ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      previewWidget = Column(
+        children: [
+          Expanded(
+            child: Image.file(
+              File(currentImage!.path),
+              fit: BoxFit.contain,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    currentImage = null;
+                  });
+                },
+                child: Text('Retake Photo'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  await uploadImageToBackend(currentImage!.path);
+                  setState(() {
+                    capturedImages.add(currentImage!);
+                    currentImage = null;
+                  });
+                },
+                child: Text('Save Photo'),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
     return Column(
       children: [
         Expanded(
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
-          ),
+          child: previewWidget,
         ),
-        ElevatedButton(
-          onPressed: () async {
-            XFile? pictureFile = await controller.takePicture();
-          await uploadImageToBackend(pictureFile.path); //upload image to backend first
-            _showFullscreenImageDialog(context, pictureFile.path);
-            capturedImages.add(pictureFile);
-          },
-          child: Text('Take Photo'),
-        ),
-        
         // ElevatedButton(
         //   onPressed: () {
         //     _navigateToImageList(context);
@@ -70,30 +125,6 @@ class _CameraPageState extends State<CameraPage> {
         //   child: Text('View Captured Photos'),
         // ),
       ],
-    );
-  }
-
-  void _showFullscreenImageDialog(BuildContext context, String imagePath) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-              _navigateToImageList(context);
-            },
-            child: Container(
-          constraints: BoxConstraints.expand(),
-          color: Colors.black, // Add a black background color
-          child: Center(
-            child: Image.file(
-              File(imagePath),
-              fit: BoxFit.contain)),
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -110,6 +141,27 @@ class _CameraPageState extends State<CameraPage> {
         capturedImages.removeWhere((image) => !File(image.path).existsSync());
       });
     }
+  }
+
+  Future<String> uploadImageToBackend(String imagePath) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('YOUR_BACKEND_URL/upload'), // Replace with actual API endpoint
+    );
+
+    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+
+    try {
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        final responseBody = await response.stream.bytesToString();
+        return responseBody; // You can handle the response from the backend here
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+    }
+
+    return '';
   }
 }
 
@@ -209,24 +261,25 @@ class _ImageListPageState extends State<ImageListPage> {
   }
 }
 
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   final cameras = await availableCameras();
+//   runApp(CameraApp(cameras: cameras));
+// }
 
-Future<String> uploadImageToBackend(String imagePath) async {
-  var request = http.MultipartRequest(
-    'POST',
-    Uri.parse('YOUR_BACKEND_URL/upload'), // Replace with actual API endpoint
-  );
+// class CameraApp extends StatelessWidget {
+//   final List<CameraDescription> cameras;
 
-  request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+//   const CameraApp({required this.cameras});
 
-  try {
-    final response = await request.send();
-    if (response.statusCode == 200) {
-      final responseBody = await response.stream.bytesToString();
-      return responseBody; // You can handle the response from the backend here
-    }
-  } catch (error) {
-    print('Error uploading image: $error');
-  }
-
-  return '';
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Camera App',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: CameraPage(cameras: cameras),
+//     );
+//   }
+// }
