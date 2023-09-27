@@ -16,7 +16,7 @@ class _UserLocationState extends State<UserLocation> {
   late String long;
 
   // Getting current location
-  Future<Position> _getCurrentLocation() async {
+   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled');
@@ -89,10 +89,12 @@ class _UserLocationState extends State<UserLocation> {
           SizedBox(
             height: 10,
           ),
+
           Text(
             address, // Display the address
             textAlign: TextAlign.center,
           ),
+
           SizedBox(
             height: 50,
           ),

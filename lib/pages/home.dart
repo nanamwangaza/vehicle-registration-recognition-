@@ -2,7 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:vehicle_registration/pages/camera_page.dart';
 import 'package:vehicle_registration/pages/geolocator.dart';
-import 'package:vehicle_registration/pages/launch_camera.dart';
+import 'package:vehicle_registration/pages/records.dart';
+import 'package:vehicle_registration/pages/user_profile.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,16 +17,23 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(), // Added app bar
-      body: Container(
-        color: Colors.white, // White background
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding:
-                  EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF003366),
+                  Colors.black,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Container(
+              padding: EdgeInsets.only(top: 40, left: 20, right: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,51 +41,68 @@ class _HomeState extends State<Home> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Text(
-                          //   'Hello Nana!',
-                          //   style: TextStyle(
-                          //     fontWeight: FontWeight.bold,
-                          //     fontSize: 26,
-                          //     color: Color(0xFF003366), // Text color
-                          //   ),
-                          // ),
-                          // Text(
-                          //   'Dar-es-Salaam, Tanzania',
-                          //   style: TextStyle(
-                          //     color: Color(0xFF003366), // Text color
-                          //   ),
-                          // )
+                          Text(
+                            'Hello Nana!',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 26,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Dar-es-Salaam, Tanzania',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )
                         ],
                       ),
-                      InkWell(
-                        child: Icon(
+                      IconButton(
+                        icon: Icon(
                           Icons.person,
-                          color: Colors.white, // Text color
+                          color: Colors.white,
                         ),
-                      )
+                        onPressed: () {},
+                      ),
                     ],
                   ),
+                  
                   SizedBox(height: 20),
+
                   Image.asset(
-                    'assets/images/car.jpg', // Replace with your image asset
+                    'assets/images/car.jpg',
                     height: 150,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
+                  
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   SizedBox(height: 20),
-
-                  _buildActionButton(Icons.camera_alt, 'Take Photo', ()async {
-                    await availableCameras().then(  //waits for list of available cameras, then goes to the CameraPage
-                (value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>CameraPage(cameras:value))) 
-                //value is the list of available cameras
-                );
-                  }
-                  ),
-                  _buildActionButton(Icons.image, 'Gallery', () {
+                  SizedBox(height: 20),
+                  _buildActionButton(Icons.camera_alt, 'Take Photo', () async {
+                    await availableCameras().then(
+                      (value) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CameraPage(cameras: value),
+                        ),
+                      ),
+                    );
+                  }),
+                  _buildActionButton(Icons.image, 'Records', () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ImageListPage(images: []),
+                        builder: (context) => ResponsesScreen()
                       ),
                     );
                   }),
@@ -87,12 +113,12 @@ class _HomeState extends State<Home> {
                         builder: (context) => UserLocation(),
                       ),
                     );
-                  })
+                  }),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -100,7 +126,7 @@ class _HomeState extends State<Home> {
   Widget _buildActionButton(
       IconData icon, String label, VoidCallback onPressed) {
     return Card(
-      color: Color(0xFF003366), // Card color
+      color: Color(0xFF003366),
       child: SizedBox(
         width: 200,
         height: 50,
@@ -109,56 +135,13 @@ class _HomeState extends State<Home> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: Colors.white), // Icon color
+              Icon(icon, color: Colors.white),
               SizedBox(width: 8),
-              Text(label, style: TextStyle(color: Colors.white)), // Text color
+              Text(label, style: TextStyle(color: Colors.white)),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF003366),
-              Colors.black,
-            ], // Gradient colors
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Hello Nana!',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 26),
-          ),
-          Text(
-            'Dar-es-Salaam, Tanzania',
-            style: TextStyle(
-              color:Colors.white ,
-              fontSize: 15// Text color
-            ),
-          )
-        ],
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.notifications,
-            color: Colors.white, // Icon color
-          ),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }

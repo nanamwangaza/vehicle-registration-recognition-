@@ -39,6 +39,7 @@ class _SignupState extends State<Signup> {
  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      
 
       final trimmedPassword = _passwordController.text.trim();
       final trimmedConfirmPassword = _confirmPasswordController.text.trim();
@@ -99,6 +100,7 @@ class _SignupState extends State<Signup> {
               ),
               child: ListView(
                 children: [
+                  
                   Form(
                     key: _formKey,
                     child: Column(
