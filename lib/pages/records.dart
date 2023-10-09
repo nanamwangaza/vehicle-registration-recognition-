@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import '../helper/database_helper.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ResponsesScreen extends StatefulWidget {
+  const ResponsesScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ResponsesScreenState createState() => _ResponsesScreenState();
 }
 
 class _ResponsesScreenState extends State<ResponsesScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
-  List<String> _responses = [];
+  List<ResponseWithDateTime> _responses = [];
 
   @override
   void initState() {
@@ -18,11 +22,13 @@ class _ResponsesScreenState extends State<ResponsesScreen> {
   }
 
   Future<void> _refreshData() async {
-    List<String> refreshedData = await DBHelper.instance.getPlateNumbers();
-
+    List<ResponseWithDateTime> refreshedData =
+        await DBHelper.instance.getPlateNumbers();
     setState(() {
       _responses = refreshedData;
     });
+    // ignore: avoid_print
+    print('Data refreshed');
   }
 
   Future<void> _showDeleteConfirmationDialog(
@@ -32,21 +38,22 @@ class _ResponsesScreenState extends State<ResponsesScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete this record?'),
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this record?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () async {
                 await _deleteResponse(context, response);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
-              child: Text('Delete'),
+              child: const Text('Delete'),
             ),
           ],
         );
@@ -55,27 +62,67 @@ class _ResponsesScreenState extends State<ResponsesScreen> {
   }
 
   Widget _buildResponseListItem(
-    
-      BuildContext context, String response, int itemIndex) {
+      BuildContext context, ResponseWithDateTime response, int itemIndex) {
     return Card(
       child: ListTile(
-        title: Row(
+        title: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              ' $itemIndex:',
-              style: TextStyle(fontSize: 16),
+            Row(
+              children: [
+                Text(' $itemIndex:',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF003366),
+                      ),
+                    )),
+                Text(
+                  ' ${response.plateNumber}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF003366),
+                  ),
+                ),
+              ],
             ),
-            Text(
-              ' $response',
-              style: TextStyle(fontSize: 16),
-            ),
+            Row(
+              children: [
+                Text(' ${response.dayOfWeek}',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    )),
+                Text(' ${response.formattedDate}',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    )),
+                const SizedBox(
+                  width: 20,
+                ),
+                Text(' ${response.formattedTime}',
+                    style: GoogleFonts.roboto(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                      ),
+                      color: const Color(0xFF003366),
+                    )),
+              ],
+            )
           ],
         ),
         trailing: IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
+          icon: const Icon(
+            Icons.delete,
+            color: Color(0xFF003366),
+          ),
           onPressed: () {
-            _showDeleteConfirmationDialog(context, response);
+            _showDeleteConfirmationDialog(context, response.plateNumber);
           },
         ),
       ),
@@ -84,29 +131,37 @@ class _ResponsesScreenState extends State<ResponsesScreen> {
 
   Future<void> _deleteResponse(BuildContext context, String response) async {
     await DBHelper.instance.deleteResponse(response);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+
+    setState(() {
+      _responses.removeWhere((item) => item.plateNumber == response);
+    });
+
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Record deleted'),
       duration: Duration(seconds: 2),
     ));
-
-    setState(() {
-      _responses.remove(response);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF003366),
-        title: Text('Records', style: TextStyle(color: Colors.white),),
+        backgroundColor: const Color(0xFF003366),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          'HISTORY',
+          style: GoogleFonts.roboto(
+              textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white)),
+        ),
         centerTitle: true,
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refreshData,
         child: _responses.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text('No records available.'),
               )
             : ListView.builder(

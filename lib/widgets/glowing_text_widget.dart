@@ -23,17 +23,17 @@ class GlowingText extends StatelessWidget {
         shadows: [
           Shadow(
             color: glowColor,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
             blurRadius: 30,
           ),
           Shadow(
             color: glowColor,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
             blurRadius: 40,
           ),
           Shadow(
             color: glowColor,
-            offset: Offset(0, 0),
+            offset: const Offset(0, 0),
             blurRadius: 45,
           ),
         ],

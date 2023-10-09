@@ -11,12 +11,11 @@ class UserLocation extends StatefulWidget {
 
 class _UserLocationState extends State<UserLocation> {
   String locationMessage = 'My current location';
-  String address = ''; // Variable to hold the address
+  String address = '';
   late String lat;
   late String long;
 
-  // Getting current location
-   Future<Position> _getCurrentLocation() async {
+  Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled');
@@ -25,8 +24,9 @@ class _UserLocationState extends State<UserLocation> {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied)
+      if (permission == LocationPermission.denied) {
         return Future.error('Location permissions are denied');
+      }
     }
 
     if (permission == LocationPermission.deniedForever) {
@@ -37,7 +37,6 @@ class _UserLocationState extends State<UserLocation> {
     return Geolocator.getCurrentPosition();
   }
 
-  // Listen to location updates
   void _liveLocation() {
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
@@ -54,10 +53,9 @@ class _UserLocationState extends State<UserLocation> {
     });
   }
 
-  // Get address
   Future<void> _getAddressFromLatLong(Position position) async {
-    List<Placemark> placemark = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     if (placemark.isNotEmpty) {
       final street = placemark[0].street ?? '';
@@ -67,7 +65,8 @@ class _UserLocationState extends State<UserLocation> {
       final country = placemark[0].country ?? '';
 
       setState(() {
-        address = '$street, $subAdministrativeArea, $locality, $administrativeArea, $country';
+        address =
+            '$street, $subAdministrativeArea, $locality, $administrativeArea, $country';
       });
     } else {
       setState(() {
@@ -86,16 +85,14 @@ class _UserLocationState extends State<UserLocation> {
             locationMessage,
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-
           Text(
-            address, // Display the address
+            address,
             textAlign: TextAlign.center,
           ),
-
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Center(
@@ -106,14 +103,12 @@ class _UserLocationState extends State<UserLocation> {
                   long = '${value.longitude}';
 
                   setState(() {
-                   // locationMessage = 'Latitude: $lat, Longitude: $long';
-
                     _liveLocation();
                     _getAddressFromLatLong(value);
                   });
                 });
               },
-              child: Text('My location'),
+              child: const Text('My location'),
             ),
           ),
         ],
@@ -121,5 +116,3 @@ class _UserLocationState extends State<UserLocation> {
     );
   }
 }
-
-

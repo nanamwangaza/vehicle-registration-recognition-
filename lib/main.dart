@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vehicle_registration/pages/home_pro.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:vehicle_registration/pages/welcome_page.dart';
 import 'helper/database_helper.dart';
 
 void main() async {
@@ -11,16 +12,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF006494)),
-          useMaterial3: true,
-        ),
-        home:  HomePro());
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: const Color(0xFF006494)),
+            useMaterial3: true,
+            textTheme: GoogleFonts.robotoTextTheme()),
+        home: const WelcomePage());
   }
 }

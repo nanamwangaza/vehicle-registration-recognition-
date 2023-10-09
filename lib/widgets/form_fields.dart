@@ -4,13 +4,14 @@ class FormFieldWidget extends StatelessWidget {
   final String label;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
-  final TextEditingController controller; // Added this line
+  final TextEditingController controller;
 
   const FormFieldWidget({
+    super.key,
     required this.label,
     required this.validator,
     required this.onSaved,
-    required this.controller, // Added this line
+    required this.controller,
   });
 
   @override
@@ -22,12 +23,12 @@ class FormFieldWidget extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -37,14 +38,14 @@ class FormFieldWidget extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 10,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: SizedBox(
               height: 60,
               child: TextFormField(
-                controller: controller, // Added this line
+                controller: controller,
                 validator: validator,
                 onSaved: onSaved,
                 decoration: InputDecoration(

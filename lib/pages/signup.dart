@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-
-import 'package:vehicle_registration/pages/home_pro.dart';
+import 'package:vehicle_registration/pages/home_bottom_nav.dart';
 import 'package:vehicle_registration/pages/login_page.dart';
 import 'package:vehicle_registration/widgets/form_field_cofirm_password.dart';
 import 'package:vehicle_registration/widgets/form_field_email.dart';
 import 'package:vehicle_registration/widgets/form_field_password.dart';
 import 'package:vehicle_registration/widgets/form_fields.dart';
-
-
-//full name,
-//username
-//email
-//password
-//punguza size za login,signup
-//bottom nav iwe na home, records(za info about the car)
-//
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -27,24 +16,24 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
- void _submitForm() async {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      
 
       final trimmedPassword = _passwordController.text.trim();
       final trimmedConfirmPassword = _confirmPasswordController.text.trim();
 
       if (trimmedPassword != trimmedConfirmPassword) {
+        // ignore: avoid_print
         print("Passwords don't match");
         return;
       }
@@ -56,7 +45,7 @@ class _SignupState extends State<Signup> {
         'password': _passwordController.text,
       };
 
-      final apiUrl = ''; // Replace with your backend URL
+      const apiUrl = ''; //
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {'Content-Type': 'application/json'},
@@ -64,20 +53,20 @@ class _SignupState extends State<Signup> {
       );
 
       if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePro()),
+          MaterialPageRoute(builder: (context) => const HomePro()),
         );
       } else {
+        // ignore: avoid_print
         print('Signup failed. Status code: ${response.statusCode}');
       }
     }
   }
 
-
   @override
   void dispose() {
-    // Dispose of the controllers when the widget is removed
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
@@ -88,25 +77,24 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0),
+            padding:
+                const EdgeInsets.only(top: 0, bottom: 0, left: 0, right: 0),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: ListView(
                 children: [
-                  
                   Form(
                     key: _formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'SIGNUP',
                           style: TextStyle(
                             color: Colors.black,
@@ -194,39 +182,36 @@ class _SignupState extends State<Signup> {
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 1,
                                 blurRadius: 10,
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
                           child: TextButton(
                             onPressed: _submitForm,
-                            child: Text(
+                            child: const Text(
                               'Sign Up',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Already have an account?'),
-                            SizedBox(width: 5),
-
+                            const Text('Already have an account?'),
+                            const SizedBox(width: 5),
                             TextButton(
                               onPressed: () {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                         Login(
-    ), 
+                                    builder: (context) => const Login(),
                                   ),
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 'Login',
                                 style: TextStyle(color: Colors.black),
                               ),

@@ -12,34 +12,29 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _reenterNewPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _reenterNewPasswordController =TextEditingController();
+      
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
       if (_newPasswordController.text == _reenterNewPasswordController.text) {
-        // Perform password reset logic using the saved new password
-        // For example, you could update the password in a database or API
-
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => HomePro()), // Navigate to the appropriate page
-        // );
       } else {
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Password Mismatch'),
-              content: Text('The new passwords do not match. Please reenter.'),
+              title: const Text('Password Mismatch'),
+              content:
+                  const Text('The new passwords do not match. Please reenter.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -51,7 +46,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   void dispose() {
-    // Dispose of the controllers when the widget is removed
     _newPasswordController.dispose();
     _reenterNewPasswordController.dispose();
     super.dispose();
@@ -63,7 +57,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -75,8 +69,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'FORGOT PASSWORD?',
                           style: TextStyle(
                             color: Colors.black,
@@ -84,27 +78,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             fontSize: 26,
                           ),
                         ),
-
-                        SizedBox(height: 20),
-
+                        const SizedBox(height: 20),
                         FormFieldPassword(
                           label: 'New Password',
-                           onSaved: (value) {
-                           _newPasswordController.text = value!;
+                          onSaved: (value) {
+                            _newPasswordController.text = value!;
                           },
                           controller: _newPasswordController,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter your new password';
                             }
-                            
+
                             return null;
                           },
                         ),
                         FormFieldPassword(
                           label: 'Reenter New Password',
-                           onSaved: (value) {
-                          _reenterNewPasswordController.text = value!;
+                          onSaved: (value) {
+                            _reenterNewPasswordController.text = value!;
                           },
                           controller: _reenterNewPasswordController,
                           validator: (value) {
@@ -117,7 +109,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Container(
                           width: 200,
                           height: 50,
@@ -127,29 +119,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                           child: TextButton(
                             onPressed: _submitForm,
-                            child: Text(
+                            child: const Text(
                               'Reset Password',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Remember your password?'),
-                            SizedBox(width: 5),
+                            const Text('Remember your password?'),
+                            const SizedBox(width: 5),
                             TextButton(
                               onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        Login(), // Replace with your actual login page
+                                        const Login(), // Replace with your actual login page
                                   ),
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 'Log In',
                                 style: TextStyle(color: Colors.black),
                               ),

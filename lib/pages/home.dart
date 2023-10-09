@@ -1,10 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:vehicle_registration/pages/camera_page.dart';
+
+import 'package:vehicle_registration/pages/camera_page_playground.dart';
 import 'package:vehicle_registration/pages/geolocator.dart';
 import 'package:vehicle_registration/pages/records.dart';
-import 'package:vehicle_registration/pages/user_profile.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,7 +19,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF003366),
@@ -31,14 +30,14 @@ class _HomeState extends State<Home> {
               ),
             ),
             child: Container(
-              padding: EdgeInsets.only(top: 40, left: 20, right: 20),
+              padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -58,7 +57,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.person,
                           color: Colors.white,
                         ),
@@ -66,56 +65,44 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  
-                  SizedBox(height: 20),
-
-                  Image.asset(
-                    'assets/images/car.jpg',
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                  
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 20),
-                  SizedBox(height: 20),
-                  _buildActionButton(Icons.camera_alt, 'Take Photo', () async {
-                    await availableCameras().then(
-                      (value) => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CameraPage(cameras: value),
-                        ),
-                      ),
-                    );
-                  }),
-                  _buildActionButton(Icons.image, 'Records', () {
-                    Navigator.push(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                const SizedBox(height: 20),
+                _buildActionButton(Icons.camera_alt, 'Take Photo', () async {
+                  await availableCameras().then(
+                    (value) => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ResponsesScreen()
+                        builder: (context) =>
+                            CameraPagePlayGround(cameras: value),
                       ),
-                    );
-                  }),
-                  _buildActionButton(Icons.location_on, 'My location', () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserLocation(),
-                      ),
-                    );
-                  }),
-                ],
-              ),
+                    ),
+                  );
+                }),
+                _buildActionButton(Icons.history, 'History', () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ResponsesScreen()),
+                  );
+                }),
+                _buildActionButton(Icons.location_on, 'My location', () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserLocation(),
+                    ),
+                  );
+                }),
+              ],
             ),
           ),
         ],
@@ -125,20 +112,38 @@ class _HomeState extends State<Home> {
 
   Widget _buildActionButton(
       IconData icon, String label, VoidCallback onPressed) {
-    return Card(
-      color: Color(0xFF003366),
-      child: SizedBox(
-        width: 200,
-        height: 50,
-        child: TextButton(
-          onPressed: onPressed,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: Colors.white),
-              SizedBox(width: 8),
-              Text(label, style: TextStyle(color: Colors.white)),
-            ],
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+      child: Card(
+        color: const Color(0xFF003366),
+        child: SizedBox(
+          width: 200,
+          height: 50,
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF003366),
+                    Colors.black,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: TextButton(
+                onPressed: onPressed,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(icon, color: Colors.white),
+                    const SizedBox(width: 10),
+                    Text(label, style: const TextStyle(color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

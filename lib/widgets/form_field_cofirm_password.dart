@@ -7,7 +7,7 @@ class FormFieldConfirmPassword extends StatelessWidget {
   final String password;
   final TextEditingController controller; // Added this line
 
-  const FormFieldConfirmPassword({
+  const FormFieldConfirmPassword({super.key, 
     required this.label,
     required this.validator,
     required this.onSaved,
@@ -24,12 +24,12 @@ class FormFieldConfirmPassword extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -39,7 +39,7 @@ class FormFieldConfirmPassword extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 10,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),

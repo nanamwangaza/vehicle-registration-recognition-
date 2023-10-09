@@ -4,13 +4,13 @@ class FormFieldEmail extends StatelessWidget {
   final String label;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
-  final TextEditingController controller; // Added this line
-
+  final TextEditingController controller;
   const FormFieldEmail({
+    super.key,
     required this.label,
     required this.validator,
     required this.onSaved,
-    required this.controller, // Added this line
+    required this.controller,
   });
 
   bool _isValidEmail(String input) {
@@ -29,12 +29,12 @@ class FormFieldEmail extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -44,14 +44,14 @@ class FormFieldEmail extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 10,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
             child: SizedBox(
               height: 60,
               child: TextFormField(
-                controller: controller, // Added this line
+                controller: controller,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
@@ -72,7 +72,7 @@ class FormFieldEmail extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                keyboardType:TextInputType.emailAddress,
+                keyboardType: TextInputType.emailAddress,
               ),
             ),
           ),

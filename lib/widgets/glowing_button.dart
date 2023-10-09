@@ -53,7 +53,7 @@ class _GlowingButtonState extends State<GlowingButton> {
       },
       child: AnimatedContainer(
         transform: Matrix4.identity()..scale(scale),
-        duration: Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 100),
         height: 48,
         width: 140,
         decoration: BoxDecoration(
@@ -65,13 +65,13 @@ class _GlowingButtonState extends State<GlowingButton> {
                     color: widget.color1.withOpacity(0.6),
                     spreadRadius: 1,
                     blurRadius: 32,
-                    offset: Offset(-8, 0),
+                    offset: const Offset(-8, 0),
                   ),
                   BoxShadow(
                     color: widget.color1.withOpacity(0.6),
                     spreadRadius: 1,
                     blurRadius: 32,
-                    offset: Offset(8, 0),
+                    offset: const Offset(8, 0),
                   ),
                 ]
               : [],
@@ -87,7 +87,7 @@ class _GlowingButtonState extends State<GlowingButton> {
           ),
           child: Text(
             widget.text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
